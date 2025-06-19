@@ -532,8 +532,7 @@
             <div class="nav-content">
                 <div class="logo">GitConvo</div>
                 <div class="nav-status">
-                    <div class="status-dot"></div>
-                    Coming Soon
+                    <button class="join-waitlist-btn notify-btn" style="padding: 0.5rem 1.5rem; font-size: 1rem;">Join Waitlist</button>
                 </div>
             </div>
         </div>
@@ -551,6 +550,11 @@
                 <p class="hero-subtitle">
                     The first version control system for AI conversations. Treat each prompt and response as a commit, with branching, merging, and collaboration built for the AI era.
                 </p>
+                <!-- Inline Email Signup (Hero) -->
+                <form class="email-form hero-email-form" style="margin: 2rem auto 0; max-width: 400px;">
+                    <input type="email" class="email-input" placeholder="Enter your email" required>
+                    <button type="submit" class="notify-btn">Notify Me</button>
+                </form>
                 
                 <div class="hero-visual">
                     <div class="terminal-window">
@@ -700,6 +704,19 @@
         </div>
     </footer>
 
+    <!-- Modal for Email Signup -->
+    <div id="waitlist-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(10,10,15,0.85); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:var(--secondary-bg); border-radius:1rem; padding:2.5rem 2rem; max-width:95vw; width:400px; box-shadow:0 8px 32px rgba(0,0,0,0.4); position:relative;">
+            <button id="close-modal-btn" style="position:absolute; top:1rem; right:1rem; background:none; border:none; color:var(--secondary-text); font-size:1.5rem; cursor:pointer;">&times;</button>
+            <h2 class="notify-title" style="font-size:2rem; margin-bottom:1rem;">Join the Waitlist</h2>
+            <p class="notify-description" style="margin-bottom:2rem;">Get early access and be part of the conversation revolution.</p>
+            <form class="email-form modal-email-form">
+                <input type="email" class="email-input" placeholder="Enter your email" required>
+                <button type="submit" class="notify-btn">Notify Me</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -717,34 +734,55 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1cm9vY2NsZWxybGppcG54a294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAzMTMxNTAsImV4cCI6MjA2NTg4OTE1MH0.wQ0OBZK3tzeFV2H2zYKKrDjDGK8NZVu0Xek0bS1Vid0';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Email form handling
-        document.querySelector('.email-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const email = this.querySelector('.email-input').value;
-            const btn = this.querySelector('.notify-btn');
+        // Email form handling (all forms)
+        document.querySelectorAll('.email-form').forEach(form => {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const email = this.querySelector('.email-input').value;
+                const btn = this.querySelector('.notify-btn');
 
-            // Save to Supabase
-            const { data, error } = await supabaseClient
-                .from('emails')
-                .insert([{ email }]);
+                // Save to Supabase
+                const { data, error } = await supabaseClient
+                    .from('emails')
+                    .insert([{ email }]);
 
-            if (!error) {
-                btn.textContent = 'Added!';
-                btn.style.background = '#22c55e';
-                setTimeout(() => {
-                    btn.textContent = 'Notify Me';
-                    btn.style.background = '';
-                    this.querySelector('.email-input').value = '';
-                }, 2000);
-            } else {
-                btn.textContent = 'Error!';
-                btn.style.background = '#ef4444';
-                setTimeout(() => {
-                    btn.textContent = 'Notify Me';
-                    btn.style.background = '';
-                }, 2000);
-            }
+                if (!error) {
+                    btn.textContent = 'Added!';
+                    btn.style.background = '#22c55e';
+                    setTimeout(() => {
+                        btn.textContent = 'Notify Me';
+                        btn.style.background = '';
+                        this.querySelector('.email-input').value = '';
+                    }, 2000);
+                } else {
+                    btn.textContent = 'Error!';
+                    btn.style.background = '#ef4444';
+                    setTimeout(() => {
+                        btn.textContent = 'Notify Me';
+                        btn.style.background = '';
+                    }, 2000);
+                }
+            });
         });
+
+        // Modal logic
+        const modal = document.getElementById('waitlist-modal');
+        const openModalBtn = document.querySelector('.join-waitlist-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        if (openModalBtn && modal && closeModalBtn) {
+            openModalBtn.addEventListener('click', () => {
+                modal.style.display = 'flex';
+            });
+            closeModalBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            // Close modal on outside click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
 
         // Intersection Observer for animations
         const observerOptions = {
