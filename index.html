@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitConvo - Coming Soon</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <style>
         :root {
             --primary-bg: #0a0a0f;
@@ -711,20 +712,38 @@
             });
         });
 
+        // Supabase config
+        const SUPABASE_URL = 'https://iuroocclelrljipnxkox.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1cm9vY2NsZWxybGppcG54a294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAzMTMxNTAsImV4cCI6MjA2NTg4OTE1MH0.wQ0OBZK3tzeFV2H2zYKKrDjDGK8NZVu0Xek0bS1Vid0';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         // Email form handling
-        document.querySelector('.email-form').addEventListener('submit', function(e) {
+        document.querySelector('.email-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = this.querySelector('.email-input').value;
             const btn = this.querySelector('.notify-btn');
-            
-            btn.textContent = 'Added!';
-            btn.style.background = '#22c55e';
-            
-            setTimeout(() => {
-                btn.textContent = 'Notify Me';
-                btn.style.background = '';
-                this.querySelector('.email-input').value = '';
-            }, 2000);
+
+            // Save to Supabase
+            const { data, error } = await supabaseClient
+                .from('emails')
+                .insert([{ email }]);
+
+            if (!error) {
+                btn.textContent = 'Added!';
+                btn.style.background = '#22c55e';
+                setTimeout(() => {
+                    btn.textContent = 'Notify Me';
+                    btn.style.background = '';
+                    this.querySelector('.email-input').value = '';
+                }, 2000);
+            } else {
+                btn.textContent = 'Error!';
+                btn.style.background = '#ef4444';
+                setTimeout(() => {
+                    btn.textContent = 'Notify Me';
+                    btn.style.background = '';
+                }, 2000);
+            }
         });
 
         // Intersection Observer for animations
