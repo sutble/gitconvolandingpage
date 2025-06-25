@@ -4,7 +4,7 @@
   "description": "GitConvo - Coming Soon Landing Page",
   "main": "index.html",
   "scripts": {
-    "build": "mkdir -p dist && cp index.html dist/ && cp demo.mp4 dist/",
+    "build": "mkdir -p public && cp index.html public/ && cp demo.mp4 public/",
     "start": "npx serve -s . -l 3000",
     "dev": "npx serve -s . -l 3000"
   },
