@@ -1,0 +1,14 @@
+{
+  "name": "gitconvo-landing",
+  "version": "1.0.0",
+  "description": "GitConvo - Coming Soon Landing Page",
+  "main": "index.html",
+  "scripts": {
+    "build": "mkdir -p dist && cp index.html dist/ && cp demo.mp4 dist/",
+    "start": "npx serve -s . -l 3000",
+    "dev": "npx serve -s . -l 3000"
+  },
+  "keywords": ["landing-page", "ai", "conversations"],
+  "author": "GitConvo Team",
+  "license": "MIT"
+}
