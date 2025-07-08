@@ -854,7 +854,11 @@
                 // Save to Supabase
                 const { data, error } = await supabaseClient
                     .from('emails')
-                    .insert([{ email }]);
+                    .insert([{ 
+                        id: crypto.randomUUID(), 
+                        email,
+                        created_at: new Date().toISOString()
+                    }]);
 
                 if (!error) {
                     btn.textContent = 'Added!';
