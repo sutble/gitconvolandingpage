@@ -840,8 +840,8 @@
         });
 
         // Supabase config
-        const SUPABASE_URL = 'https://iuroocclelrljipnxkox.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1cm9vY2NsZWxybGppcG54a294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAzMTMxNTAsImV4cCI6MjA2NTg4OTE1MH0.wQ0OBZK3tzeFV2H2zYKKrDjDGK8NZVu0Xek0bS1Vid0';
+        const SUPABASE_URL = process.env.SUPABASE_URL;
+        const SUPABASE_KEY = process.env.SUPABASE_KEY;
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // Email form handling (all forms)
